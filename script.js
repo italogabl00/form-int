@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
       if (nameInput.value.length > 0) {
         nameFeedback.textContent = ""; // remove a mensagem de erro se houver texto
       } else {
-        nameFeedback.textContent = "Please enter a valid name.";
+        nameFeedback.textContent = "Por favor insira um nome válido.";
         nameFeedback.style.color = "red";
       }
     });
@@ -34,10 +34,10 @@ document.addEventListener("DOMContentLoaded", function() {
       cpfInput.value = formatCPF(cpfValue); // aplica a formatação de CPF
       
       if (cpfValue.length === 11 && validateCPF(cpfValue)) {
-        cpfFeedback.textContent = "Valid CPF!";
+        cpfFeedback.textContent = "CPF Válido!";
         cpfFeedback.style.color = "green";
       } else {
-        cpfFeedback.textContent = "Invalid CPF.";
+        cpfFeedback.textContent = "CPF Inválido.";
         cpfFeedback.style.color = "red";
       }
     });
@@ -46,10 +46,10 @@ document.addEventListener("DOMContentLoaded", function() {
     emailInput.addEventListener("input", function() {
       const emailValue = emailInput.value;
       if (emailValue.includes("@") && emailValue.includes(".")) {
-        emailFeedback.textContent = "Valid email!";
+        emailFeedback.textContent = "Email Válido!";
         emailFeedback.style.color = "green";
       } else {
-        emailFeedback.textContent = "Please enter a valid email.";
+        emailFeedback.textContent = "Por favor insira um email válido.";
         emailFeedback.style.color = "red";
       }
     });
@@ -66,9 +66,9 @@ document.addEventListener("DOMContentLoaded", function() {
       if (name === "" || email === "" || cpf === "" || message === "") {
         alert("Please fill in all fields.");
       } else if (!validateCPF(cpf)) {
-        alert("Invalid CPF.");
+        alert("CPF Inválido.");
       } else if (!email.includes("@")) {
-        alert("Invalid email.");
+        alert("Email Inválido.");
       } else {
         successMessage.classList.remove("hidden");
         contactForm.reset(); // limpa o formulário após o envio
