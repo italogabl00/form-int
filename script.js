@@ -5,11 +5,35 @@ document.addEventListener("DOMContentLoaded", function() {
     const cpfInput = document.getElementById("cpf");
     const cpfFeedback = document.getElementById("cpfFeedback");
     const successMessage = document.getElementById("successMessage");
+    const nameInput = document.getElementById("name"); // adiciona a referência ao campo de nome
+    const nameFeedback = document.getElementById("nameFeedback"); // feedback de nome (adicione este elemento no HTML)
   
-    // validação do CPF
+    // limitar o campo de nome para apenas caracteres alfabéticos
+    nameInput.addEventListener("input", function() {
+      let nameValue = nameInput.value;
+  
+      // remover números e caracteres especiais, permitindo apenas letras e espaços
+      nameInput.value = nameValue.replace(/[^a-zA-Z\s]/g, "");
+  
+      if (nameInput.value.length > 0) {
+        nameFeedback.textContent = ""; // remove a mensagem de erro se houver texto
+      } else {
+        nameFeedback.textContent = "Please enter a valid name.";
+        nameFeedback.style.color = "red";
+      }
+    });
+  
+    // formatação e limitação do CPF à medida que o usuário digita
     cpfInput.addEventListener("input", function() {
-      const cpfValue = cpfInput.value;
-      if (validateCPF(cpfValue)) {
+      let cpfValue = cpfInput.value.replace(/\D/g, ""); // remove todos os caracteres não numéricos
+      
+      if (cpfValue.length > 11) {
+        cpfValue = cpfValue.slice(0, 11); // limita a entrada a 11 dígitos
+      }
+      
+      cpfInput.value = formatCPF(cpfValue); // aplica a formatação de CPF
+      
+      if (cpfValue.length === 11 && validateCPF(cpfValue)) {
         cpfFeedback.textContent = "Valid CPF!";
         cpfFeedback.style.color = "green";
       } else {
@@ -32,11 +56,11 @@ document.addEventListener("DOMContentLoaded", function() {
   
     // validação do formulário ao enviar
     contactForm.addEventListener("submit", function(event) {
-      event.preventDefault(); // Impede o envio do formulário
+      event.preventDefault(); // impede o envio do formulário
   
-      const name = document.getElementById("name").value.trim();
+      const name = nameInput.value.trim();
       const email = emailInput.value.trim();
-      const cpf = cpfInput.value.trim();
+      const cpf = cpfInput.value.replace(/\D/g, "").trim(); // remove caracteres de formatação para validação
       const message = document.getElementById("message").value.trim();
   
       if (name === "" || email === "" || cpf === "" || message === "") {
@@ -51,9 +75,18 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
   
-    // Função de validação de CPF
+    // função de formatação de CPF
+    function formatCPF(cpf) {
+      // aplica a formatação 000.000.000-00
+      return cpf
+        .replace(/(\d{3})(\d)/, "$1.$2") // adiciona o primeiro ponto após os três primeiros dígitos
+        .replace(/(\d{3})(\d)/, "$1.$2") // adiciona o segundo ponto após os três próximos dígitos
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2"); // adiciona o traço após o nono dígito
+    }
+  
+    // função de validação de CPF
     function validateCPF(cpf) {
-      cpf = cpf.replace(/[^\d]+/g, ''); // remove qualquer caractere não numérico
+      cpf = cpf.replace(/[^\d]+/g, ''); // Remove qualquer caractere não numérico
       if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
         return false; // cpf deve ter 11 dígitos e não pode ter todos os números iguais
       }
